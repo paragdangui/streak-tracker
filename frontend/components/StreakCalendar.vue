@@ -11,13 +11,15 @@
       <div
         v-for="day in daysInMonth"
         :key="day"
-        class="p-2 rounded-full cursor-pointer"
+        class="relative p-2 rounded-full cursor-pointer flex items-center justify-center"
         :class="{
-          'bg-purple-500 text-white': isCompleted(day),
           'bg-gray-200': !isCompleted(day) && isToday(day),
         }"
       >
-        {{ day }}
+        <span :class="{'opacity-50': isCompleted(day)}">{{ day }}</span>
+        <div v-if="isCompleted(day)" class="absolute inset-0 flex items-center justify-center">
+          <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        </div>
       </div>
     </div>
   </div>

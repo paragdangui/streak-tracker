@@ -30,5 +30,16 @@ export const useStreaksStore = defineStore('streaks', {
         console.error(error);
       }
     },
+    async resetStreaks() {
+      try {
+        const response = await fetch('/api/streaks/reset', { method: 'POST' });
+        if (!response.ok) {
+          throw new Error('Failed to reset streaks');
+        }
+        await this.fetchStreaks();
+      } catch (error) {
+        console.error(error);
+      }
+    },
   },
 });

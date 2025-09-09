@@ -19,4 +19,9 @@ export class StreaksController {
       currentStreak,
     };
   }
+
+  @Post('reset')
+  reset() {
+    return this.streaksService.reset();
+  }
 }

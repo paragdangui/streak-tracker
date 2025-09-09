@@ -2,16 +2,18 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Streak } from './streak.entity';
+import { DevToolsService } from '../dev-tools/dev-tools.service'; // Import DevToolsService
 
 @Injectable()
 export class StreaksService {
   constructor(
     @InjectRepository(Streak)
     private streaksRepository: Repository<Streak>,
+    private devToolsService: DevToolsService, // Inject DevToolsService
   ) {}
 
   async create(): Promise<Streak> {
-    const today = new Date();
+    const today = this.devToolsService.getSimulatedDate();
     today.setHours(0, 0, 0, 0);
 
     const existingStreak = await this.streaksRepository.findOne({
@@ -37,7 +39,7 @@ export class StreaksService {
     }
 
     let currentStreak = 0;
-    const today = new Date();
+    const today = this.devToolsService.getSimulatedDate();
     today.setHours(0, 0, 0, 0);
 
     // Check if today is a completed day
@@ -88,5 +90,9 @@ export class StreaksService {
     }
 
     return currentStreak;
+  }
+
+  async reset(): Promise<void> {
+    await this.streaksRepository.clear();
   }
 }
