@@ -3,10 +3,17 @@
 		class="bg-gradient-to-br from-blue-400 to-purple-600 min-h-screen flex flex-col items-center justify-center text-white font-sans"
 	>
 		<div class="text-center">
-			<p class="text-sm opacity-90 mb-2" v-if="currentDateFormatted">
+			<p class="text-xl opacity-90 mb-2" v-if="currentDateFormatted">
 				{{ currentDateFormatted }}
 			</p>
-			<h1 class="text-6xl font-bold mb-4">{{ streaksStore.currentStreak }}</h1>
+			<div class="flex items-center justify-center gap-3 mb-4">
+				<FlameIcon
+					v-if="streaksStore.currentStreak > 0"
+					:size="64"
+					:title="`Streak on fire: ${streaksStore.currentStreak}`"
+				/>
+				<h1 class="text-6xl font-bold">{{ streaksStore.currentStreak }}</h1>
+			</div>
 			<p class="text-xl mb-8">Current Streak</p>
 			<button
 				@click="streaksStore.markToday()"
@@ -26,6 +33,7 @@
 	import { onMounted, ref } from 'vue';
 	import { useStreaksStore } from '~/stores/streaks';
 	import DevTools from '~/components/DevTools.vue';
+    import FlameIcon from '~/components/FlameIcon.vue';
 
 	const streaksStore = useStreaksStore();
 	const currentDateFormatted = ref('');
