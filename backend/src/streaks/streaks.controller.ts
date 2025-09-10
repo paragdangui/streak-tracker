@@ -24,4 +24,9 @@ export class StreaksController {
   reset() {
     return this.streaksService.reset();
   }
+
+  @Post('undo-today')
+  undoToday() {
+    return this.streaksService.undoToday();
+  }
 }

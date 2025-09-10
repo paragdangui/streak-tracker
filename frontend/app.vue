@@ -2,7 +2,7 @@
 	<div
 		class="bg-gradient-to-br from-blue-400 to-purple-600 min-h-screen flex flex-col items-center justify-center text-white font-sans"
 	>
-		<div class="text-center">
+    <div class="text-center">
 			<p class="text-xl opacity-90 mb-2" v-if="currentDateFormatted">
 				{{ currentDateFormatted }}
 			</p>
@@ -15,12 +15,22 @@
 				<h1 class="text-6xl font-bold">{{ streaksStore.currentStreak }}</h1>
 			</div>
 			<p class="text-xl mb-8">Current Streak</p>
-			<button
-				@click="streaksStore.markToday()"
-				class="bg-white text-purple-600 font-bold py-3 px-8 rounded-full shadow-lg hover:bg-purple-100 transition duration-300"
-			>
-				Mark Today as Completed
-			</button>
+      <div class="flex items-center justify-center gap-3">
+        <button
+          @click="streaksStore.markToday()"
+          class="bg-white text-purple-600 font-bold py-3 px-8 rounded-full shadow-lg hover:bg-purple-100 transition duration-300"
+        >
+          Mark Today as Completed
+        </button>
+        <button
+          @click="streaksStore.undoToday()"
+          :disabled="!isTodayMarked"
+          class="border border-white/80 text-white font-semibold py-2.5 px-5 rounded-full shadow transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white/10 active:bg-white/20"
+          :title="isTodayMarked ? 'Undo marking today as completed' : 'No completion to undo for today'"
+        >
+          Undo Today
+        </button>
+      </div>
 		</div>
 		<div class="mt-16">
 			<StreakCalendar />
@@ -30,30 +40,60 @@
 </template>
 
 <script setup lang="ts">
-	import { onMounted, ref } from 'vue';
+  import { onMounted, ref, computed } from 'vue';
 	import { useStreaksStore } from '~/stores/streaks';
 	import DevTools from '~/components/DevTools.vue';
     import FlameIcon from '~/components/FlameIcon.vue';
 
 	const streaksStore = useStreaksStore();
-	const currentDateFormatted = ref('');
+  const currentDateFormatted = ref('');
+  const simulatedToday = ref<Date | null>(null);
+  const todayDate = computed(() => {
+    const d = simulatedToday.value ? new Date(simulatedToday.value) : new Date();
+    d.setHours(0, 0, 0, 0);
+    return d;
+  });
+  const toYMD = (d: Date) => {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+  };
+  const isTodayMarked = computed(() => {
+    const t = todayDate.value;
+    const todayKey = toYMD(t);
+    return streaksStore.streaks.some((s) => {
+      const d = new Date(s.completion_date);
+      return toYMD(d) === todayKey;
+    });
+  });
 
-	async function fetchCurrentDate() {
-		try {
-			const res = await fetch('/api/dev-tools/current-date');
-			if (!res.ok) return;
-			const data = await res.json();
-			const date = new Date(data.currentDate);
-			currentDateFormatted.value = date.toLocaleDateString(undefined, {
-				weekday: 'long',
-				year: 'numeric',
-				month: 'long',
-				day: 'numeric',
-			});
-		} catch (e) {
-			// ignore
-		}
-	}
+  async function fetchCurrentDate() {
+      try {
+        const res = await fetch('/api/dev-tools/current-date');
+        if (!res.ok) return;
+    const data = await res.json();
+    const date = new Date(data.currentDate);
+    simulatedToday.value = date;
+    currentDateFormatted.value = date.toLocaleDateString(undefined, {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  } catch (e) {
+    // Fallback to real current date if dev-tools endpoint unavailable
+    const date = new Date();
+    date.setHours(0, 0, 0, 0);
+    simulatedToday.value = date;
+    currentDateFormatted.value = date.toLocaleDateString(undefined, {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  }
+    }
 
 	onMounted(() => {
 		streaksStore.fetchStreaks();

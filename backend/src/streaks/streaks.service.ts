@@ -95,4 +95,13 @@ export class StreaksService {
   async reset(): Promise<void> {
     await this.streaksRepository.clear();
   }
+
+  async undoToday(): Promise<void> {
+    const today = this.devToolsService.getSimulatedDate();
+    today.setHours(0, 0, 0, 0);
+    const existing = await this.streaksRepository.findOne({ where: { completion_date: today } });
+    if (existing) {
+      await this.streaksRepository.delete(existing.id);
+    }
+  }
 }

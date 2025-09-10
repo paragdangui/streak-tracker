@@ -41,5 +41,16 @@ export const useStreaksStore = defineStore('streaks', {
         console.error(error);
       }
     },
+    async undoToday() {
+      try {
+        const response = await fetch('/api/streaks/undo-today', { method: 'POST' });
+        if (!response.ok) {
+          throw new Error('Failed to undo today');
+        }
+        await this.fetchStreaks();
+      } catch (error) {
+        console.error(error);
+      }
+    },
   },
 });
