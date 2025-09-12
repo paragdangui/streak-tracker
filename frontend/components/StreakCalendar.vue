@@ -53,27 +53,19 @@
       >
         <span class="relative z-10">{{ day }}</span>
         
-        <!-- Completion indicator background -->
+        <!-- Streak segment background: creates a continuous pill across consecutive days in a week -->
         <div 
           v-if="isCompleted(day)" 
-          class="absolute inset-0 rounded-full"
+          class="absolute"
           :class="getDayCompletionIndicator(day)"
         ></div>
         
-        <!-- Completion checkmark -->
-        <div 
-          v-if="isCompleted(day)" 
-          class="absolute inset-0 rounded-full flex items-center justify-center z-10"
-        >
-          <svg class="w-4 h-4 text-white drop-shadow-sm" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-          </svg>
-        </div>
+        <!-- No checkmark; number sits on the orange streak bar -->
 
         <!-- Today indicator ring -->
         <div 
           v-if="isToday(day)" 
-          class="absolute inset-0 rounded-full border-2"
+          class="absolute inset-0 rounded-full border-2 z-20"
           :class="isCompleted(day) ? 'border-blue-300' : 'border-blue-500'"
         ></div>
 
@@ -259,7 +251,28 @@ const getDayClasses = (day: number) => {
 };
 
 const getDayCompletionIndicator = (day: number) => {
-  return 'bg-orange-500 shadow-lg'; // Orange for all completed days
+  // Build classes that create a continuous horizontal pill across
+  // consecutive completed days within the same week row.
+  const year = currentDate.value.getFullYear();
+  const month = currentDate.value.getMonth();
+  const date = new Date(year, month, day);
+
+  const isSunday = date.getDay() === 0;
+  const isSaturday = date.getDay() === 6;
+  const prevCompleted = !isSunday && isCompleted(day - 1);
+  const nextCompleted = !isSaturday && isCompleted(day + 1);
+
+  // Slight vertical inset to resemble the screenshot padding
+  const classes: string[] = ['bg-orange-500', 'top-1', 'bottom-1', 'z-0'];
+
+  // Slightly overhang into adjacent cells when connected to hide grid gaps
+  classes.push(prevCompleted ? '-left-1' : 'left-0');
+  classes.push(nextCompleted ? '-right-1' : 'right-0');
+
+  if (!prevCompleted) classes.push('rounded-l-full');
+  if (!nextCompleted) classes.push('rounded-r-full');
+
+  return classes.join(' ');
 };
 
 const getDayTooltip = (day: number) => {
