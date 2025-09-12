@@ -17,16 +17,18 @@
 			<p class="text-xl mb-8">Current Streak</p>
       <div class="flex items-center justify-center gap-3">
         <button
+          v-if="!isTodayMarked"
           @click="streaksStore.markToday()"
           class="bg-white text-purple-600 font-bold py-3 px-8 rounded-full shadow-lg hover:bg-purple-100 transition duration-300"
+          title="Mark today as completed"
         >
           Mark Today as Completed
         </button>
         <button
+          v-else
           @click="streaksStore.undoToday()"
-          :disabled="!isTodayMarked"
-          class="border border-white/80 text-white font-semibold py-2.5 px-5 rounded-full shadow transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white/10 active:bg-white/20"
-          :title="isTodayMarked ? 'Undo marking today as completed' : 'No completion to undo for today'"
+          class="border border-white/80 text-white font-semibold py-2.5 px-5 rounded-full shadow transition duration-200 hover:bg-white/10 active:bg-white/20"
+          title="Undo marking today as completed"
         >
           Undo Today
         </button>
