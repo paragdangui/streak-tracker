@@ -90,14 +90,10 @@
     </div>
 
     <!-- Legend -->
-    <div class="mt-6 flex justify-center gap-3 text-xs text-gray-600">
+    <div class="mt-6 flex justify-center gap-4 text-xs text-gray-600">
       <div class="flex items-center gap-1">
         <div class="w-3 h-3 rounded-full bg-orange-500"></div>
         <span>Streak</span>
-      </div>
-      <div class="flex items-center gap-1">
-        <div class="w-3 h-3 rounded-full bg-green-500"></div>
-        <span>Completed</span>
       </div>
       <div class="flex items-center gap-1">
         <div class="w-3 h-3 rounded-full border-2 border-blue-500"></div>
@@ -263,10 +259,7 @@ const getDayClasses = (day: number) => {
 };
 
 const getDayCompletionIndicator = (day: number) => {
-  if (isPartOfCurrentStreak(day)) {
-    return 'bg-orange-500 shadow-lg'; // Orange for streak days
-  }
-  return 'bg-green-500 shadow-lg'; // Green for old completed days
+  return 'bg-orange-500 shadow-lg'; // Orange for all completed days
 };
 
 const getDayTooltip = (day: number) => {
