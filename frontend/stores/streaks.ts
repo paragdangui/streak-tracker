@@ -6,6 +6,7 @@ export const useStreaksStore = defineStore('streaks', {
     currentStreak: 0,
     currentDate: null as Date | null,
     currentDateFormatted: '',
+    isSimulated: false,
   }),
   getters: {
     todayDate(): Date {
@@ -36,6 +37,7 @@ export const useStreaksStore = defineStore('streaks', {
           const data = await response.json();
           const date = new Date(data.currentDate);
           this.currentDate = date;
+          this.isSimulated = data.isSimulated || false;
           this.currentDateFormatted = date.toLocaleDateString(undefined, {
             weekday: 'long',
             year: 'numeric',
@@ -48,6 +50,7 @@ export const useStreaksStore = defineStore('streaks', {
         const date = new Date();
         date.setHours(0, 0, 0, 0);
         this.currentDate = date;
+        this.isSimulated = false;
         this.currentDateFormatted = date.toLocaleDateString(undefined, {
           weekday: 'long',
           year: 'numeric',

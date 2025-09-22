@@ -3,6 +3,9 @@
 		class="bg-gradient-to-br from-blue-400 to-purple-600 min-h-screen flex flex-col items-center justify-center text-white font-sans"
 	>
     <div class="text-center">
+			<h1 v-if="streaksStore.isSimulated" class="text-3xl font-bold mb-4 text-yellow-300">
+				SIMULATION MODE
+			</h1>
 			<p class="text-xl opacity-90 mb-2" v-if="streaksStore.currentDateFormatted">
 				{{ streaksStore.currentDateFormatted }}
 			</p>
