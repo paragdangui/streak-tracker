@@ -1,30 +1,53 @@
-# Project Information:
+# Project Overview
 
-- The frontend use Nuxt 4 with tailwind v4.1
-- Backend use NestJs.
-- Both frontend and backend use 2 seperate parent folders.
+This is a full-stack web application designed to track streaks. It consists of a Nuxt.js frontend and a NestJS backend. The entire application is containerized using Docker for easy local development.
 
-## For further Instructions on how the Docker, Backend and Frontend should be created refer the below specifications:
+## Technologies
 
-### Backend (NestJS):
+*   **Frontend:** Nuxt.js 4, Vue 3, Pinia for state management, and Tailwind CSS for styling.
+*   **Backend:** NestJS, TypeORM, and MySQL for the database.
+*   **DevOps:** Docker and Docker Compose.
 
-- API rate limiting and caching
-- Proper error handling and logging
-- Swagger/OpenAPI documentation
-- Environment configuration
-- Health check endpoints
+# Building and Running
 
-### Frontend (Vue 3):
+The application is orchestrated using Docker Compose.
 
-- Composition API usage
-- Component library (Tailwind)
-- State management (Pinia)
-- Responsive design
-- Error boundaries
+**To build and run the application:**
 
-### Docker Setup:
+```bash
+docker-compose up --build
+```
 
-- Root docker-compose.yml for local development
-- Individual Dockerfile for each service (frontend/backend)
-- Environment variable management
-- Database service (MySQL/MongoDB) if needed
+This will start the following services:
+
+*   **frontend:** Accessible at [http://localhost:8080](http://localhost:8080)
+*   **backend:** Accessible at [http://localhost:8001](http://localhost:8001)
+*   **db:** A MySQL database running on port 3308.
+
+**To stop the application:**
+
+```bash
+docker-compose down
+```
+
+## Development Conventions
+
+### Backend (NestJS)
+
+*   **API:** The backend follows the principles of RESTful APIs.
+*   **Database:** The project uses TypeORM to interact with the MySQL database.
+*   **Scripts:**
+    *   `npm run start:dev`: Starts the backend in development mode with file watching.
+    *   `npm run build`: Builds the application for production.
+    *   `npm run test`: Runs unit tests.
+    *   `npm run lint`: Lints the codebase.
+
+### Frontend (Nuxt.js)
+
+*   **Component-Based:** The frontend is built using Vue 3 components.
+*   **State Management:** Pinia is used for centralized state management.
+*   **Styling:** Tailwind CSS is used for styling.
+*   **Scripts:**
+    *   `npm run dev`: Starts the frontend in development mode.
+    *   `npm run build`: Builds the application for production.
+    *   `npm run generate`: Generates a static site.

@@ -37,6 +37,18 @@
 		<div class="mt-16">
 			<StreakCalendar />
 		</div>
+
+    <!-- Lottie animation -->
+    <div class="mt-16 flex items-center justify-center">
+      <ClientOnly>
+        <DotLottieVue
+          style="height: 500px; width: 500px"
+          autoplay
+          loop
+          :src="FireAnimation"
+        />
+      </ClientOnly>
+    </div>
 	</div>
 	<DevTools />
 </template>
@@ -46,6 +58,8 @@
 	import { useStreaksStore } from '~/stores/streaks';
 	import DevTools from '~/components/DevTools.vue';
     import FlameIcon from '~/components/FlameIcon.vue';
+    import { DotLottieVue } from '@lottiefiles/dotlottie-vue';
+    import FireAnimation from '~/assets/Fire.lottie';
 
 	const streaksStore = useStreaksStore();
   const currentDateFormatted = ref('');
