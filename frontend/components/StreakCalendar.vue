@@ -101,7 +101,7 @@
 	const currentDate = ref(new Date());
 	const simulatedToday = ref<Date | null>(null);
 
-	const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+	const weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 	// Get current date (real or simulated)
 	const getCurrentDate = () => {
@@ -146,7 +146,9 @@
 	const blankDays = computed(() => {
 		const year = currentDate.value.getFullYear();
 		const month = currentDate.value.getMonth();
-		return new Date(year, month, 1).getDay();
+		const firstDay = new Date(year, month, 1).getDay();
+		// Convert Sunday (0) to be day 6, and Monday (1) to be day 0
+		return firstDay === 0 ? 6 : firstDay - 1;
 	});
 
 	// New computed property for completed days in current month
@@ -266,10 +268,11 @@
 		const month = currentDate.value.getMonth();
 		const date = new Date(year, month, day);
 
-		const isSunday = date.getDay() === 0;
-		const isSaturday = date.getDay() === 6;
-		const prevCompleted = !isSunday && isCompleted(day - 1);
-		const nextCompleted = !isSaturday && isCompleted(day + 1);
+		const dayOfWeek = date.getDay();
+		const isMonday = dayOfWeek === 1;
+		const isSunday = dayOfWeek === 0;
+		const prevCompleted = !isMonday && isCompleted(day - 1);
+		const nextCompleted = !isSunday && isCompleted(day + 1);
 
 		// Slight vertical inset to resemble the screenshot padding
 		const classes: string[] = ['bg-orange-500', 'top-1', 'bottom-1', 'z-0'];
