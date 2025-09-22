@@ -7,11 +7,15 @@
 				{{ currentDateFormatted }}
 			</p>
 			<div class="flex items-center justify-center gap-3 mb-4">
-				<FlameIcon
-					v-if="streaksStore.currentStreak > 0"
-					:size="64"
-					:title="`Streak on fire: ${streaksStore.currentStreak}`"
-				/>
+				<ClientOnly>
+					<DotLottieVue
+						v-if="streaksStore.currentStreak > 0"
+						style="height: 80px; width: 80px"
+						autoplay
+						loop
+						:src="FireAnimation"
+					/>
+				</ClientOnly>
 				<h1 class="text-6xl font-bold">{{ streaksStore.currentStreak }}</h1>
 			</div>
 			<p class="text-xl mb-8">Current Streak</p>
@@ -38,17 +42,6 @@
 			<StreakCalendar />
 		</div>
 
-    <!-- Lottie animation -->
-    <div class="mt-16 flex items-center justify-center">
-      <ClientOnly>
-        <DotLottieVue
-          style="height: 500px; width: 500px"
-          autoplay
-          loop
-          :src="FireAnimation"
-        />
-      </ClientOnly>
-    </div>
 	</div>
 	<DevTools />
 </template>
