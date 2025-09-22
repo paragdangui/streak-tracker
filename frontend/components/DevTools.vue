@@ -31,7 +31,7 @@ import { ref, onMounted } from 'vue';
 import { useStreaksStore } from '~/stores/streaks';
 
 const streaksStore = useStreaksStore();
-const devMode = process.env.NODE_ENV === 'development';
+const devMode = import.meta.env.DEV;
 
 const dropdownOpen = ref(false);
 const selectedDate = ref(''); // YYYY-MM-DD format
@@ -47,13 +47,13 @@ const fetchCurrentDate = async () => {
       const data = await response.json();
       // Convert the date to YYYY-MM-DD format for the date input
       const date = new Date(data.currentDate);
-      selectedDate.value = date.toISOString().split('T')[0];
+      selectedDate.value = date.toISOString().split('T')[0] || '';
     }
   } catch (error) {
     console.error('Error fetching current date:', error);
     // Fallback to today's date if API call fails
     const today = new Date();
-    selectedDate.value = today.toISOString().split('T')[0];
+    selectedDate.value = today.toISOString().split('T')[0] || '';
   }
 };
 

@@ -50,7 +50,6 @@
   import { onMounted, ref, computed } from 'vue';
 	import { useStreaksStore } from '~/stores/streaks';
 	import DevTools from '~/components/DevTools.vue';
-    import FlameIcon from '~/components/FlameIcon.vue';
     import { DotLottieVue } from '@lottiefiles/dotlottie-vue';
     import FireAnimation from '~/assets/Fire.lottie';
 

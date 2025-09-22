@@ -1,10 +1,8 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { StreaksModule } from './streaks/streaks.module';
-import { DevToolsModule } from './dev-tools/dev-tools.module'; // Import DevToolsModule
+import { DevToolsModule } from './dev-tools/dev-tools.module';
 
 @Module({
   imports: [
@@ -20,9 +18,9 @@ import { DevToolsModule } from './dev-tools/dev-tools.module'; // Import DevTool
       synchronize: true, // Be cautious with this in production
     }),
     StreaksModule,
-    DevToolsModule, // Add DevToolsModule
+    DevToolsModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
