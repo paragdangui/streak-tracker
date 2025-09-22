@@ -91,7 +91,7 @@
 					@click="onDayClick(day)"
 					:title="getDayTooltip(day)"
 				>
-					<span class="relative z-10">{{ day }}</span>
+					<span class="relative rounded-md z-10">{{ day }}</span>
 
 					<!-- Streak segment background: creates a continuous pill across consecutive days in a week -->
 					<div
@@ -119,10 +119,10 @@
 				@click="selectMonth(monthIndex - 1)"
 			>
 				<!-- Month name -->
-				<h3 class="text-xs font-semibold text-gray-700 mb-2">
+				<h3 class="text-xs font-semibold text-gray-800 mb-2">
 					{{ getMonthName(monthIndex - 1) }}
 				</h3>
-				
+
 				<!-- Mini calendar grid -->
 				<div class="grid grid-cols-7 gap-px text-xs">
 					<!-- Weekday headers (abbreviated) -->
@@ -133,7 +133,7 @@
 					>
 						{{ day }}
 					</div>
-					
+
 					<!-- Empty cells for days before month starts -->
 					<div
 						v-for="blank in getBlankDaysForMonth(monthIndex - 1)"
@@ -530,7 +530,11 @@
 	};
 
 	const selectMonth = (monthIndex: number) => {
-		currentDate.value = new Date(currentDate.value.getFullYear(), monthIndex, 1);
+		currentDate.value = new Date(
+			currentDate.value.getFullYear(),
+			monthIndex,
+			1,
+		);
 		isYearView.value = false;
 	};
 
