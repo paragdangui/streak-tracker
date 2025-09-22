@@ -1,3 +1,19 @@
+<script setup lang="ts">
+	import { useStreaksStore } from '~/stores/streaks';
+	import DevTools from '~/components/DevTools.vue';
+	import { DotLottieVue } from '@lottiefiles/dotlottie-vue';
+	import FireAnimation from '~/assets/Fire.lottie';
+	import { onMounted } from 'vue';
+
+	const streaksStore = useStreaksStore();
+
+	// Move data fetching to client-side only
+	onMounted(async () => {
+		await streaksStore.fetchStreaks();
+		await streaksStore.fetchCurrentDate();
+	});
+</script>
+
 <template>
 	<div
 		class="bg-gradient-to-br from-blue-400 to-purple-600 min-h-screen flex flex-col items-center justify-center text-white font-sans"
@@ -65,22 +81,6 @@
 	</div>
 	<DevTools />
 </template>
-
-<script setup lang="ts">
-	import { useStreaksStore } from '~/stores/streaks';
-	import DevTools from '~/components/DevTools.vue';
-	import { DotLottieVue } from '@lottiefiles/dotlottie-vue';
-	import FireAnimation from '~/assets/Fire.lottie';
-	import { onMounted } from 'vue';
-
-	const streaksStore = useStreaksStore();
-
-	// Move data fetching to client-side only
-	onMounted(async () => {
-		await streaksStore.fetchStreaks();
-		await streaksStore.fetchCurrentDate();
-	});
-</script>
 
 <style>
 	/* You can add global styles here if needed */
