@@ -31,7 +31,11 @@ import { ref, onMounted } from 'vue';
 import { useStreaksStore } from '~/stores/streaks';
 
 const streaksStore = useStreaksStore();
-const devMode = import.meta.env.DEV;
+const devMode = ref(false);
+
+onMounted(() => {
+  devMode.value = import.meta.env.DEV;
+});
 
 const dropdownOpen = ref(false);
 const selectedDate = ref(''); // YYYY-MM-DD format

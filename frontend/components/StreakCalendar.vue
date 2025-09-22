@@ -342,7 +342,7 @@
 	};
 
 	// Initialize component
-	onMounted(() => {
-		fetchCurrentDate();
+	onMounted(async () => {
+		await fetchCurrentDate();
 	});
 </script>
