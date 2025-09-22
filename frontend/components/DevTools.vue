@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useStreaksStore } from '~/stores/streaks';
 
 const streaksStore = useStreaksStore();
@@ -39,6 +39,27 @@ const selectedDate = ref(''); // YYYY-MM-DD format
 const toggleDropdown = () => {
   dropdownOpen.value = !dropdownOpen.value;
 };
+
+const fetchCurrentDate = async () => {
+  try {
+    const response = await fetch('/api/dev-tools/current-date');
+    if (response.ok) {
+      const data = await response.json();
+      // Convert the date to YYYY-MM-DD format for the date input
+      const date = new Date(data.currentDate);
+      selectedDate.value = date.toISOString().split('T')[0];
+    }
+  } catch (error) {
+    console.error('Error fetching current date:', error);
+    // Fallback to today's date if API call fails
+    const today = new Date();
+    selectedDate.value = today.toISOString().split('T')[0];
+  }
+};
+
+onMounted(() => {
+  fetchCurrentDate();
+});
 
 const resetData = async () => {
   if (confirm('Are you sure you want to reset all data? This cannot be undone.')) {
@@ -82,7 +103,7 @@ const resetSimulatedDate = async () => {
     }
     const data = await response.json();
     alert(data.message);
-    selectedDate.value = ''; // Clear the date input
+    await fetchCurrentDate(); // Refresh to show the current date
     await streaksStore.fetchStreaks(); // Refresh data after resetting simulated date
     dropdownOpen.value = false;
   } catch (error) {
