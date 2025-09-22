@@ -17,7 +17,7 @@
           <button @click="setSimulatedDate" class="w-full bg-green-500 text-white font-bold py-2 px-4 rounded-md shadow-lg hover:bg-green-700 transition duration-300">
             Apply Simulated Date
           </button>
-          <button @click="resetSimulatedDate" class="w-full bg-yellow-500 text-white font-bold py-2 px-4 rounded-md shadow-lg hover:bg-yellow-700 transition duration-300">
+          <button @click="resetSimulatedDate" :disabled="!isSimulated" class="w-full font-bold py-2 px-4 rounded-md shadow-lg transition duration-300" :class="isSimulated ? 'bg-yellow-500 text-white hover:bg-yellow-700' : 'bg-gray-300 text-gray-500 cursor-not-allowed'">
             Reset Simulated Date
           </button>
         </div>
@@ -35,6 +35,7 @@ const devMode = import.meta.env.DEV;
 
 const dropdownOpen = ref(false);
 const selectedDate = ref(''); // YYYY-MM-DD format
+const isSimulated = ref(false);
 
 const toggleDropdown = () => {
   dropdownOpen.value = !dropdownOpen.value;
@@ -48,12 +49,14 @@ const fetchCurrentDate = async () => {
       // Convert the date to YYYY-MM-DD format for the date input
       const date = new Date(data.currentDate);
       selectedDate.value = date.toISOString().split('T')[0] || '';
+      isSimulated.value = data.isSimulated || false;
     }
   } catch (error) {
     console.error('Error fetching current date:', error);
     // Fallback to today's date if API call fails
     const today = new Date();
     selectedDate.value = today.toISOString().split('T')[0] || '';
+    isSimulated.value = false;
   }
 };
 
@@ -83,8 +86,9 @@ const setSimulatedDate = async () => {
     if (!response.ok) {
       throw new Error('Failed to set simulated date');
     }
-    const data = await response.json();
-    alert(data.message);
+    await response.json();
+    isSimulated.value = true;
+    await streaksStore.fetchCurrentDate(); // Refresh current date
     await streaksStore.fetchStreaks(); // Refresh data after setting simulated date
     dropdownOpen.value = false;
   } catch (error) {
@@ -101,9 +105,10 @@ const resetSimulatedDate = async () => {
     if (!response.ok) {
       throw new Error('Failed to reset simulated date');
     }
-    const data = await response.json();
-    alert(data.message);
-    await fetchCurrentDate(); // Refresh to show the current date
+    await response.json();
+    isSimulated.value = false;
+    await streaksStore.fetchCurrentDate(); // Refresh current date in store
+    await fetchCurrentDate(); // Refresh to show the current date in this component
     await streaksStore.fetchStreaks(); // Refresh data after resetting simulated date
     dropdownOpen.value = false;
   } catch (error) {

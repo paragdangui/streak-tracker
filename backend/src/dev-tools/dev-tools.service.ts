@@ -12,6 +12,10 @@ export class DevToolsService {
     return this.simulatedDate || new Date();
   }
 
+  isSimulationActive(): boolean {
+    return this.simulatedDate !== null;
+  }
+
   resetSimulatedDate() {
     this.simulatedDate = null;
   }

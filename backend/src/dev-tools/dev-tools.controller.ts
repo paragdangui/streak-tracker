@@ -20,6 +20,9 @@ export class DevToolsController {
 
   @Get('current-date')
   getCurrentDate() {
-    return { currentDate: this.devToolsService.getSimulatedDate().toISOString() };
+    return { 
+      currentDate: this.devToolsService.getSimulatedDate().toISOString(),
+      isSimulated: this.devToolsService.isSimulationActive()
+    };
   }
 }
