@@ -8,9 +8,7 @@
         :class="{'text-gray-400 cursor-not-allowed': !canGoToPreviousMonth}"
         :disabled="!canGoToPreviousMonth"
       >
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-        </svg>
+        <ChevronLeft />
       </button>
       
       <div class="text-center">
@@ -24,9 +22,7 @@
         :class="{'text-gray-400 cursor-not-allowed': !canGoToNextMonth}"
         :disabled="!canGoToNextMonth"
       >
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
+        <ChevronRight />
       </button>
     </div>
 
