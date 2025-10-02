@@ -21,20 +21,6 @@
 		return d;
 	};
 
-	// Fetch simulated date from dev tools
-	const fetchCurrentDate = async () => {
-		try {
-			const res = await fetch('/api/dev-tools/current-date');
-			if (!res.ok) return;
-			const data = await res.json();
-			const date = new Date(data.currentDate);
-			simulatedToday.value = date;
-		} catch (e) {
-			// Fallback to real current date if dev-tools endpoint unavailable
-			const date = new Date();
-			simulatedToday.value = date;
-		}
-	};
 
 	const monthYear = computed(() => {
 		return currentDate.value.toLocaleDateString('en-US', {
@@ -91,18 +77,24 @@
 
 	// Navigation constraints
 	const canGoToPreviousMonth = computed(() => {
-		if (streaksStore.streaks.length === 0) return false;
-
-		const firstStreak = streaksStore.streaks[0];
-		if (!firstStreak) return false;
-
-		const earliestStreak = new Date(firstStreak.completion_date);
+		const today = getCurrentDate();
 		const previousMonth = new Date(
 			currentDate.value.getFullYear(),
 			currentDate.value.getMonth() - 1,
 			1,
 		);
 
+		// If no streaks exist, allow navigation within reasonable range (2 years back)
+		if (streaksStore.streaks.length === 0) {
+			const twoYearsAgo = new Date(today.getFullYear() - 2, today.getMonth(), 1);
+			return previousMonth >= twoYearsAgo;
+		}
+
+		// If streaks exist, don't allow navigation before the earliest streak
+		const firstStreak = streaksStore.streaks[0];
+		if (!firstStreak) return false;
+
+		const earliestStreak = new Date(firstStreak.completion_date);
 		return (
 			previousMonth >=
 			new Date(earliestStreak.getFullYear(), earliestStreak.getMonth(), 1)
@@ -122,14 +114,20 @@
 
 	// Year navigation constraints
 	const canGoToPreviousYear = computed(() => {
-		if (streaksStore.streaks.length === 0) return false;
+		const today = getCurrentDate();
+		const previousYear = currentDate.value.getFullYear() - 1;
 
+		// If no streaks exist, allow navigation within reasonable range (5 years back)
+		if (streaksStore.streaks.length === 0) {
+			const fiveYearsAgo = today.getFullYear() - 5;
+			return previousYear >= fiveYearsAgo;
+		}
+
+		// If streaks exist, don't allow navigation before the earliest streak
 		const firstStreak = streaksStore.streaks[0];
 		if (!firstStreak) return false;
 
 		const earliestStreak = new Date(firstStreak.completion_date);
-		const previousYear = currentDate.value.getFullYear() - 1;
-
 		return previousYear >= earliestStreak.getFullYear();
 	});
 
@@ -396,8 +394,8 @@
 	};
 
 	// Initialize component
-	onMounted(async () => {
-		await fetchCurrentDate();
+	onMounted(() => {
+		// Data fetching is handled by app.vue
 	});
 </script>
 

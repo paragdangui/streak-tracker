@@ -33,7 +33,7 @@ services:
 
   db:
     image: mysql:8.0
-    restart: always
+    restart: "no"
     environment:
       MYSQL_DATABASE: testdb
       MYSQL_USER: user
