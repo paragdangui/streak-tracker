@@ -16,7 +16,7 @@
 
 <template>
 	<div
-		class="bg-gradient-to-br from-blue-400 to-purple-600 min-h-screen flex flex-col items-center justify-center text-white font-sans"
+		class="animated-gradient min-h-screen flex flex-col items-center justify-center text-white font-sans"
 	>
 		<div class="text-center">
 			<ClientOnly>
@@ -83,5 +83,21 @@
 </template>
 
 <style>
-	/* You can add global styles here if needed */
+.animated-gradient {
+	background: linear-gradient(-45deg, #3b82f6, #8b5cf6, #ec4899, #6366f1);
+	background-size: 400% 400%;
+	animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
 </style>
