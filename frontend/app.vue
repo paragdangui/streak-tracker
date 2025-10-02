@@ -73,7 +73,7 @@
 				</div>
 			</ClientOnly>
 		</div>
-		<div class="mt-16">
+		<div class="my-16">
 			<ClientOnly>
 				<StreakCalendar />
 			</ClientOnly>
@@ -83,21 +83,21 @@
 </template>
 
 <style>
-.animated-gradient {
-	background: linear-gradient(-45deg, #3b82f6, #8b5cf6, #ec4899, #6366f1);
-	background-size: 400% 400%;
-	animation: gradientShift 15s ease infinite;
-}
+	.animated-gradient {
+		background: linear-gradient(-45deg, #3b82f6, #8b5cf6, #ec4899, #6366f1);
+		background-size: 400% 400%;
+		animation: gradientShift 15s ease infinite;
+	}
 
-@keyframes gradientShift {
-	0% {
-		background-position: 0% 50%;
+	@keyframes gradientShift {
+		0% {
+			background-position: 0% 50%;
+		}
+		50% {
+			background-position: 100% 50%;
+		}
+		100% {
+			background-position: 0% 50%;
+		}
 	}
-	50% {
-		background-position: 100% 50%;
-	}
-	100% {
-		background-position: 0% 50%;
-	}
-}
 </style>

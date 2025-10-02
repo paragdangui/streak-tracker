@@ -21,7 +21,6 @@
 		return d;
 	};
 
-
 	const monthYear = computed(() => {
 		return currentDate.value.toLocaleDateString('en-US', {
 			month: 'long',
@@ -86,7 +85,11 @@
 
 		// If no streaks exist, allow navigation within reasonable range (2 years back)
 		if (streaksStore.streaks.length === 0) {
-			const twoYearsAgo = new Date(today.getFullYear() - 2, today.getMonth(), 1);
+			const twoYearsAgo = new Date(
+				today.getFullYear() - 2,
+				today.getMonth(),
+				1,
+			);
 			return previousMonth >= twoYearsAgo;
 		}
 
@@ -340,6 +343,12 @@
 		}
 	};
 
+	const isCurrentMonth = (monthIndex: number) => {
+		const today = getCurrentDate();
+		const year = currentDate.value.getFullYear();
+		return today.getFullYear() === year && today.getMonth() === monthIndex;
+	};
+
 	const toggleView = () => {
 		isYearView.value = !isYearView.value;
 	};
@@ -401,7 +410,8 @@
 
 <template>
 	<div
-		class="bg-white text-gray-800 p-6 rounded-xl shadow-lg w-full max-w-md mx-auto"
+		class="bg-white text-gray-800 p-6 rounded-xl shadow-lg w-full mx-auto"
+		:class="isYearView ? 'max-w-4xl' : 'max-w-md'"
 	>
 		<!-- Header with navigation -->
 		<div class="flex justify-between items-center mb-6">
@@ -512,25 +522,26 @@
 		</div>
 
 		<!-- Year View -->
-		<div v-else class="grid grid-cols-3 gap-4">
+		<div v-else class="grid grid-cols-2 lg:grid-cols-3 gap-8">
 			<div
 				v-for="monthIndex in 12"
 				:key="monthIndex"
-				class="text-center"
+				class="text-center p-4 rounded-lg border transition-all duration-200 cursor-pointer"
+				:class="isCurrentMonth(monthIndex - 1) ? 'bg-blue-50 border-blue-300 hover:shadow-md hover:border-blue-400' : 'border-gray-200 hover:shadow-md hover:border-gray-300'"
 				@click="selectMonth(monthIndex - 1)"
 			>
 				<!-- Month name -->
-				<h3 class="text-xs font-semibold text-gray-800 mb-2">
+				<h3 class="text-base font-bold text-gray-800 mb-4">
 					{{ getMonthName(monthIndex - 1) }}
 				</h3>
 
 				<!-- Mini calendar grid -->
-				<div class="grid grid-cols-7 gap-px text-xs">
+				<div class="grid grid-cols-7 gap-1 text-sm">
 					<!-- Weekday headers (abbreviated) -->
 					<div
-						v-for="day in ['M', 'T', 'W', 'T', 'F', 'S', 'S']"
+						v-for="day in ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']"
 						:key="day"
-						class="text-gray-500 text-center h-4 flex items-center justify-center"
+						class="text-gray-500 text-center h-6 flex items-center justify-center font-medium"
 					>
 						{{ day }}
 					</div>
@@ -539,14 +550,14 @@
 					<div
 						v-for="blank in getBlankDaysForMonth(monthIndex - 1)"
 						:key="'blank-' + blank"
-						class="h-4"
+						class="h-8"
 					></div>
 
 					<!-- Days of the month -->
 					<div
 						v-for="day in getDaysInMonthForYear(monthIndex - 1)"
 						:key="day"
-						class="relative h-4 flex items-center justify-center rounded-sm text-xs transition-all duration-200 cursor-pointer"
+						class="relative h-8 flex items-center justify-center rounded-md text-sm transition-all duration-200"
 						:class="getYearDayClasses(monthIndex - 1, day)"
 						:title="getYearDayTooltip(monthIndex - 1, day)"
 					>
@@ -555,13 +566,13 @@
 						<!-- Streak indicator for year view -->
 						<div
 							v-if="isCompletedInYear(monthIndex - 1, day)"
-							class="absolute top-0 bottom-0 left-0 right-0 bg-orange-500 rounded-sm z-0"
+							class="absolute top-0 bottom-0 left-0 right-0 bg-orange-500 rounded-md z-0"
 						></div>
 
 						<!-- Today indicator for year view -->
 						<div
 							v-if="isTodayInYear(monthIndex - 1, day)"
-							class="absolute top-0 bottom-0 left-0 right-0 rounded-sm border border-blue-500 z-20"
+							class="absolute top-0 bottom-0 left-0 right-0 rounded-md border-2 border-blue-500 z-20"
 						></div>
 					</div>
 				</div>
