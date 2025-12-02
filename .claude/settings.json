@@ -24,7 +24,14 @@
 			"mcp__figma__get_design_context",
 			"Bash(git diff:*)"
 		],
-		"deny": ["Read(./.env)", "Read(./.env.*)"],
+		"deny": [
+			"Read(./.env)",
+			"Read(./.env.*)",
+			"Read(**/.env)",
+			"Read(**/.env.*)",
+			"Read(backend/.env)",
+			"Read(frontend/.env)"
+		],
 		"ask": []
 	}
 }
